@@ -3,12 +3,11 @@
 #define BOARD_H
 
 #include "ChessPiece.h"
-#include <vector>
 
 class Board
 {
 private:
-	std::vector<std::vector<ChessPiece*>> board;
+	ChessPiece* board[8][8];
 
 public:
 	Board();
@@ -16,10 +15,7 @@ public:
 	~Board();
 
 	// Getters
-	ChessPiece* getPieceAt(std::string& pos) const;
-
-	// Get the board
-	std::vector<std::vector<ChessPiece*>> getBoard() const;
+	ChessPiece* getPiece(std::string& pos) const;
 
 	// Move a piece
 	int movePiece(std::string& startPos, std::string& endPos);
