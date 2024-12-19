@@ -2,24 +2,25 @@
 #define CHESSPIECE_H
 
 #include <string>
+#include "Board.h"
 
 class ChessPiece
 {
 private:
-	std::string currentPos;
-	char colorAndType;
+    std::string currentPos;
+    char colorAndType;
 
 public:
-	ChessPiece(std::string& pos, char colorAndType);
+    ChessPiece(std::string pos, char colorAndType);
 
-	~ChessPiece();
+    ~ChessPiece();
 
-	std::string getCurrentPos() const;
-	char getColorAndType() const;
+    virtual std::string getCurrentPos() const;
+    virtual  char getColorAndType() const;
 
-	void setPos(std::string& pos);
+    virtual void setPos(std::string& pos);
 
-	virtual bool isValidMove(std::string& newPos) const;
+	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board) const;
 };
 
 #endif

@@ -3,15 +3,16 @@
 #define KING_H
 
 #include "ChessPiece.h"
+#include "Board.h"
 
 class King : public ChessPiece
 {
 public:
-	King(std::string& pos, char colorAndType);
+	King(char colorAndType);
 
 	~King();
 
-	virtual bool isValidMove(std::string& newPos) const override;
+	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board) const override;
 };
 
 #endif

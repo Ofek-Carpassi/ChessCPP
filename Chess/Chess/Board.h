@@ -18,7 +18,7 @@ public:
 	ChessPiece* getPiece(std::string& pos) const;
 
 	// Move a piece
-	int movePiece(std::string& startPos, std::string& endPos);
+	int movePiece(std::string& startPos, std::string& endPos, char currentPlayer);
 };
 
 #endif

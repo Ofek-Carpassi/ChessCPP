@@ -11,7 +11,7 @@ public:
 
 	~Knight();
 
-	virtual bool isValidMove(std::string& newPos) const override;
+	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board) const override;
 };
 
 #endif
