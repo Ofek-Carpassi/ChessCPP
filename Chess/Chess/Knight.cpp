@@ -3,3 +3,11 @@
 Knight::Knight(std::string& pos, char colorAndType) : ChessPiece(pos, colorAndType)
 {
 }
+
+Knight::~Knight()
+{
+}
+
+
+
+
