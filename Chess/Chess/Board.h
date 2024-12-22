@@ -2,12 +2,15 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+#define COL 8
+#define ROW 8
+
 #include "ChessPiece.h"
 
 class Board
 {
 private:
-	ChessPiece* board[8][8];
+	ChessPiece* board[ROW][COL];
 
 public:
 	Board();

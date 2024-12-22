@@ -66,7 +66,7 @@ int Rook::isValidMove(std::string& currentPos, std::string& newPos, Board* board
 		// Check if the destination position has a piece of the same color
 		char colorAndType = piece->getColorAndType();
 		
-		// Check if both the destination piece and current piece are the smae color
+		// Check if both the destination piece and current piece are the same color
 		if (colorAndType != '0' && (colorAndType >= 'A' && colorAndType <= 'Z') == (this->getColorAndType() >= 'A' && this->getColorAndType() <= 'Z'))
 		{
 			return 3;

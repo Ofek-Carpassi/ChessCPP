@@ -11,9 +11,9 @@
 Board::Board()
 {
 	// Initialize the board with nullptrs
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < ROW; i++)
 	{
-		for (int j = 0; j < 8; j++)
+		for (int j = 0; j < COL; j++)
 		{
 			board[i][j] = new NullPiece();
 		}
