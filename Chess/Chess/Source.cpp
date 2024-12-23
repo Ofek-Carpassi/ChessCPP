@@ -12,7 +12,7 @@ using std::cout;
 using std::endl;
 using std::string;
 
-
+/*
 void main()
 {
 	srand(time_t(NULL));
@@ -61,11 +61,11 @@ void main()
 		// YOUR CODE
 		strcpy_s(msgToGraphics, "YOUR CODE"); // msgToGraphics should contain the result of the operation
 
-		/******* JUST FOR EREZ DEBUGGING ******/
+		// JUST FOR EREZ DEBUGGING
 		int r = rand() % 10; // just for debugging......
 		msgToGraphics[0] = (char)(1 + '0');
 		msgToGraphics[1] = 0;
-		/******* JUST FOR EREZ DEBUGGING ******/
+		//JUST FOR EREZ DEBUGGING
 
 
 		// return result to graphics		
@@ -77,3 +77,4 @@ void main()
 
 	p.close();
 }
+*/

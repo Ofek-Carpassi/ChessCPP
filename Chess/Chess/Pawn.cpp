@@ -2,6 +2,8 @@
 
 Pawn::Pawn(std::string& pos, char colorAndType)
 {
+	this->currentPos = pos;
+	this->colorAndType = colorAndType;
 }
 
 Pawn::~Pawn()

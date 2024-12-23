@@ -18,7 +18,7 @@ void testBishop() {
 
 	std::cout << "Testing Bishop" << std::endl;
 	ChessPiece* bishop = board.getPiece(pos);
-	assert(bishop->isValidMove(pos, newPos, &board) == 1);
+	assert(bishop->isValidMove(pos, newPos, &board) == 6);
 	std::cout << "Expected: 6" << std::endl;
 	std::cout << "Actual: " << bishop->isValidMove(pos, newPos, &board) << std::endl;
 
