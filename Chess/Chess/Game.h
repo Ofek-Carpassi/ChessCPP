@@ -14,9 +14,10 @@ private:
 	Player* blackPlayer;
 	Board* board;
 	std::string startPos;
+	bool isInPlay;
 
 public:
-	Game(char currentPlayer);
+	Game();
 
 	~Game();
 

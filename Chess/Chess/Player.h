@@ -2,27 +2,27 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "King.h"
+#include "ChessPiece.h"
 
 class Player
 {
 private:
 	char color;
 	bool isInCheck;
-	King* king;
+	ChessPiece* king;
 
 public:
-	Player(char color, King* king);
+	Player(char color, ChessPiece* king);
 
 	~Player();
 
-	King* getKing() const;
+	ChessPiece* getKing() const;
 
 	bool getIsInCheck() const;
 
 	void setIsInCheck(bool isInCheck);
 
-	void setKing(King* king);
+	void setKing(ChessPiece* king);
 };
 
 #endif

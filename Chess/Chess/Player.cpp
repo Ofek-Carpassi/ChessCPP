@@ -1,12 +1,12 @@
 #include "Player.h"
 
-Player::Player(char color, King* king) : color(color), isInCheck(false), king(king)
+Player::Player(char color, ChessPiece* king) : color(color), isInCheck(false), king(king)
 {}
 
 Player::~Player()
 {}
 
-King* Player::getKing() const
+ChessPiece* Player::getKing() const
 {
 	return king;
 }
@@ -21,7 +21,7 @@ void Player::setIsInCheck(bool isInCheck)
 	this->isInCheck = isInCheck;
 }
 
-void Player::setKing(King* king)
+void Player::setKing(ChessPiece* king)
 {
 	this->king = king;
 }
