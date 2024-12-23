@@ -7,7 +7,7 @@
 class NullPiece : public ChessPiece
 {
 public:
-	NullPiece();
+	NullPiece(std::string pos);
 
 	~NullPiece();
 

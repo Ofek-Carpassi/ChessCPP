@@ -7,7 +7,7 @@
 class Bishop : public ChessPiece
 {
 public:
-	Bishop(std::string& pos, char colorAndType);
+	Bishop(std::string pos, char colorAndType);
 
 	~Bishop();
 

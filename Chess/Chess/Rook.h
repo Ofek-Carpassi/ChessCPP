@@ -7,7 +7,7 @@
 class Rook : public ChessPiece
 {
 public:
-	Rook(std::string& pos, char colorAndType);
+	Rook(std::string pos, char colorAndType);
 
 	~Rook();
 

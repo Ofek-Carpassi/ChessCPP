@@ -1,6 +1,6 @@
 #include "Pawn.h"
 
-Pawn::Pawn(std::string& pos, char colorAndType) : ChessPiece(pos, colorAndType)
+Pawn::Pawn(std::string& pos, char colorAndType)
 {
 }
 

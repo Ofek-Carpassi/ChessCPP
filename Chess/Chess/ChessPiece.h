@@ -4,17 +4,15 @@
 #include <string>
 #include "Board.h"
 
+class Board;
+
 class ChessPiece
 {
-private:
+protected:
     std::string currentPos;
     char colorAndType;
 
 public:
-    ChessPiece(std::string pos, char colorAndType);
-
-    ~ChessPiece();
-
     virtual std::string getCurrentPos() const;
     virtual  char getColorAndType() const;
 

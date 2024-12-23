@@ -148,6 +148,7 @@
     <ClCompile Include="ChessPiece.cpp" />
     <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="NullPiece.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Player.cpp" />

@@ -1,6 +1,6 @@
 #include "King.h"
 
-King::King(char colorAndType) : ChessPiece("", colorAndType)
+King::King(char colorAndType)
 {
 	std::string pos;
 	// Get the position from the color (black will be at the bottom, white at the top)
@@ -13,8 +13,8 @@ King::King(char colorAndType) : ChessPiece("", colorAndType)
 		pos = "e8";
 	}
 
-	// set the king pos using chess piece setPos func
-	this->setPos(pos);
+	this->currentPos = pos;
+	this->colorAndType = colorAndType;
 }
 
 King::~King()

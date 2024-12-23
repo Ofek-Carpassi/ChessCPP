@@ -1,7 +1,9 @@
 #include "Rook.h"
 
-Rook::Rook(std::string& pos, char colorAndType) : ChessPiece(pos, colorAndType)
+Rook::Rook(std::string pos, char colorAndType)
 {
+	this->currentPos = pos;
+	this->colorAndType = colorAndType;
 }
 
 Rook::~Rook()

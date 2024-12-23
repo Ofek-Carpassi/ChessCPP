@@ -1,7 +1,9 @@
 #include "Knight.h"
 
-Knight::Knight(std::string& pos, char colorAndType) : ChessPiece(pos, colorAndType)
+Knight::Knight(std::string pos, char colorAndType)
 {
+	this->currentPos = pos;
+	this->colorAndType = colorAndType;
 }
 
 Knight::~Knight()

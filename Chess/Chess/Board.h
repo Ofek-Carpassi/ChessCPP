@@ -7,10 +7,12 @@
 
 #include "ChessPiece.h"
 
+class ChessPiece;
+
 class Board
 {
 private:
-	ChessPiece* board[ROW][COL];
+	ChessPiece* board[COL][ROW];
 
 public:
 	Board();

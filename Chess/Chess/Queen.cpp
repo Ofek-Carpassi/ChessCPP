@@ -1,7 +1,21 @@
 #include "Queen.h"
 
-Queen::Queen(std::string& pos, char colorAndType) : ChessPiece(pos, colorAndType)
+Queen::Queen(char colorAndType)
 {
+	std::string pos;
+	// Get the position from the color (black will be at the bottom, white at the top)
+	if (colorAndType == 'w')
+	{
+		pos = "d1";
+	}
+	else
+	{
+		pos = "d8";
+	}
+
+	// set the king pos using chess piece setPos func
+	this->colorAndType = colorAndType;
+	this->currentPos = pos;
 }
 
 Queen::~Queen()

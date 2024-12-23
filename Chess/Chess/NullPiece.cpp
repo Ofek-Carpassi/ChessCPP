@@ -1,6 +1,10 @@
 #include "NullPiece.h"
 
-NullPiece::NullPiece() : ChessPiece("0", '0') {}
+NullPiece::NullPiece(std::string pos)
+{
+	this->currentPos = pos;
+	this->colorAndType = '0';
+}
 
 NullPiece::~NullPiece() {}
 

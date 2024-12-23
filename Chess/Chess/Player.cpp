@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(char color, King* king) : color(color), isInCheck(false), king(king) {}
+Player::Player(char color, King* king) : color(color), isInCheck(false), king(king)
 {}
 
 Player::~Player()

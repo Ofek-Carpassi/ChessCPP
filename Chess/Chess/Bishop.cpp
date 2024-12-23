@@ -1,7 +1,9 @@
 #include "Bishop.h"
 
-Bishop::Bishop(std::string& pos, char colorAndType) : ChessPiece(pos, colorAndType)
+Bishop::Bishop(std::string pos, char colorAndType)
 {
+	this->currentPos = pos;
+	this->colorAndType = colorAndType;
 }
 
 Bishop::~Bishop()

@@ -7,7 +7,7 @@
 class Knight : public ChessPiece
 {
 public:
-	Knight(std::string& pos, char colorAndType);
+	Knight(std::string pos, char colorAndType);
 
 	~Knight();
 
