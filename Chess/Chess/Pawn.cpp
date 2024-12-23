@@ -39,10 +39,15 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
 		return 7;
 	}
 
-	// Check if the move is legal
-	if (currentCol != newCol)
+	int step = 0;
+	char colorAndType = this->getColorAndType();
+	if (colorAndType >= 'A' && colorAndType <= 'Z')
 	{
-		return 6;
+		step = 1;
+	}
+	else
+	{
+		step = -1;
 	}
 
 
