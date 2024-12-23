@@ -20,7 +20,7 @@ public:
 
     virtual void setPos(std::string& pos);
 
-	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board) const;
+	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board) const = 0;
 };
 
 #endif
