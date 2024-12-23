@@ -11,21 +11,36 @@
 #include <iostream>
 #include <cassert>
 
-void testBishop() {
+void testPawn() {
 	Board board = Board();
-	std::string pos = "c1";
-	std::string newPos = "e3";
+	std::string currentPos = "a7";
+	std::string newPos = "a6";
 
-	std::cout << "Testing Bishop" << std::endl;
-	ChessPiece* bishop = board.getPiece(pos);
-	assert(bishop->isValidMove(pos, newPos, &board) == 6);
-	std::cout << "Expected: 6" << std::endl;
-	std::cout << "Actual: " << bishop->isValidMove(pos, newPos, &board) << std::endl;
+	ChessPiece* pawn = board.getPiece(currentPos);
 
+	std::cout << pawn->isValidMove(currentPos, newPos, &board) << std::endl;
+
+	newPos = "a5";
+	std::cout << pawn->isValidMove(currentPos, newPos, &board) << std::endl;
+
+	newPos = "b6";
+	std::cout << pawn->isValidMove(currentPos, newPos, &board) << std::endl;
 }
 
 int main() {
-    testBishop();
+
+	std::string currentPos = "e1";
+	std::string newPos = "a2";
+
+	Board board = Board();
+
+	ChessPiece* piece = board.getPiece(currentPos);
+
+	std::cout << piece->isValidMove(currentPos, newPos, &board) << std::endl;
+
+	testPawn();
+
+
     std::cout << "All tests passed!" << std::endl;
     return 0;
 }

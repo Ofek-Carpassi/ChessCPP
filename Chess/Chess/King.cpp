@@ -4,7 +4,7 @@ King::King(char colorAndType)
 {
 	std::string pos;
 	// Get the position from the color (black will be at the bottom, white at the top)
-	if (colorAndType == 'w')
+	if (colorAndType == 'K')
 	{
 		pos = "e1";
 	}
@@ -25,10 +25,10 @@ King::~King()
 
 int King::isValidMove(std::string& currentPos, std::string& newPos, Board* board) const
 {
-	int currentRow = currentPos[1] - '0';
-	int currentCol = currentPos[0] - 'a';
+	int currentRow = currentPos[1] - '1';
+	int currentCol = currentPos[0] - 'a'; // between 0 and 7
 
-	int newRow = newPos[1] - '0';
+	int newRow = newPos[1] - '1';
 	int newCol = newPos[0] - 'a';
 
 	// Check for all 9 cases of returns

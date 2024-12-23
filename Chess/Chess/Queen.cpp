@@ -4,7 +4,7 @@ Queen::Queen(char colorAndType)
 {
 	std::string pos;
 	// Get the position from the color (black will be at the bottom, white at the top)
-	if (colorAndType == 'w')
+	if (colorAndType == 'Q')
 	{
 		pos = "d1";
 	}
@@ -24,10 +24,10 @@ Queen::~Queen()
 
 int Queen::isValidMove(std::string& currentPos, std::string& newPos, Board* board) const
 {
-	int currentRow = currentPos[1] - '0';
+	int currentRow = currentPos[1] - '1';
 	int currentCol = currentPos[0] - 'a';
 
-	int newRow = newPos[1] - '0';
+	int newRow = newPos[1] - '1';
 	int newCol = newPos[0] - 'a';
 
 	// Check for all 9 cases of returns
