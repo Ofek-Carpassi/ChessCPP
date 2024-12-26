@@ -4,6 +4,8 @@
 
 #include "ChessPiece.h"
 
+class ChessPiece;
+
 class Player
 {
 private:

@@ -6,7 +6,9 @@
 #define ROW 8
 
 #include "ChessPiece.h"
+#include "Game.h"
 
+class Game;
 class ChessPiece;
 
 class Board
@@ -17,13 +19,18 @@ private:
 public:
 	Board();
 
+	// Copy constructor
+	Board(const Board& other);
+
 	~Board();
 
 	// Getters
 	ChessPiece* getPiece(std::string& pos) const;
 
 	// Move a piece
-	int movePiece(std::string& startPos, std::string& endPos, char currentPlayer);
+	void movePiece(int currentRow, int currentCol, int newRow, int newCol);
+
+	bool isInCheck(char color);
 };
 
 #endif

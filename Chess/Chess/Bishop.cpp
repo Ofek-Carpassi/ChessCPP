@@ -10,99 +10,56 @@ Bishop::~Bishop()
 {
 }
 
-int Bishop::isValidMove(std::string& currentPos, std::string& newPos, Board* board) const
-{
-	int currentRow = currentPos[1] - '1';
-	int currentCol = currentPos[0] - 'a';
+int Bishop::isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck) const {
+    int currentRow = currentPos[1] - '1';
+    int currentCol = currentPos[0] - 'a';
+    int newRow = newPos[1] - '1';
+    int newCol = newPos[0] - 'a';
 
-	int newRow = newPos[1] - '1';
-	int newCol = newPos[0] - 'a';
+    if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) {
+        return INVALID_MOVE_OUT_OF_BOUNDS;
+    }
 
-	// Check for all 9 cases of returns
-	// 0 if the move was successful
-	// 1 - Valid move, ate a piece
-	// 2 - invalid move - in the source pos there is no piece of the current player
-	// 3 - invalid move - in the destination pos there is a piece of the current player
-	// 4 - invalid move - the move will cause a check on the current player
-	// 5 - invalid move - the indexes of the positions are out of bounds
-	// 6 - invalid move - illegal move for the piece
-	// 7 - invalid move - the source and destination positions are the same
-	// 8 - valid move - checkmate - BONUS
+    if (currentPos == newPos) {
+        return INVALID_MOVE_SAME_POS;
+    }
 
-	// Check if the new position is out of bounds
-	if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7)
-	{
-		return 5;
-	}
+    if (abs(newRow - currentRow) != abs(newCol - currentCol)) {
+        return INVALID_MOVE_ILLEGAL_MOVE;
+    }
 
-	// Check if the source and destination positions are the same
-	if (currentPos == newPos)
-	{
-		return 7;
-	}
+    // Check path
+    int rowStep = (newRow > currentRow) ? 1 : -1;
+    int colStep = (newCol > currentCol) ? 1 : -1;
 
-	// Check if the move is legal
-	if (abs(newRow - currentRow) != abs(newCol - currentCol))
-	{
-		return 6;
-	}
+    for (int i = 1; i < abs(newRow - currentRow); i++) {
+        std::string pos = "";
+        pos += (char)(currentCol + (i * colStep) + 'a');
+        pos += (char)(currentRow + (i * rowStep) + '1');
+        if (board->getPiece(pos)->getColorAndType() != '0') {
+            return INVALID_MOVE_ILLEGAL_MOVE;
+        }
+    }
 
-	// Check if the path is clear
-	if (newRow > currentRow && newCol > currentCol)
-	{
-		for (int i = 1; i < abs(newRow - currentRow); i++)
-		{
-			char col = currentCol + i + 'a';
-			std::string pos = std::string(1, col) + std::to_string(currentRow + i);
-			ChessPiece* piece = board->getPiece(pos);
-			if (piece->getColorAndType() != '0')
-			{
-				return 6;
-			}
-		}
-		ChessPiece* piece = board->getPiece(newPos);
-		if (piece->getColorAndType() != '0' && (piece->getColorAndType() >= 'A' && piece->getColorAndType() <= 'Z') == (this->getColorAndType() >= 'A' && this->getColorAndType() <= 'Z'))
-		{
-			return 3;
-		}
+    ChessPiece* destPiece = board->getPiece(newPos);
+    bool isSameColor = (destPiece->getColorAndType() != '0' &&
+        (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType)));
 
-		if (piece->getColorAndType() != '0')
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+    if (isSameColor) {
+        return INVALID_MOVE_PIECE_OF_PLAYER;
+    }
 
-	if (newRow > currentRow && newCol < currentCol)
-	{
-		for (int i = 1; i < abs(newRow - currentRow); i++)
-		{
-			char col = currentCol - i + 'a';
-			std::string pos = std::string(1, col) + std::to_string(currentRow + i);
-			ChessPiece* piece = board->getPiece(pos);
-			if (piece->getColorAndType() != '0')
-			{
-				return 6;
-			}
-		}
-		ChessPiece* piece = board->getPiece(newPos);
-		if (piece->getColorAndType() != '0' && (piece->getColorAndType() >= 'A' && piece->getColorAndType() <= 'Z') == (this->getColorAndType() >= 'A' && this->getColorAndType() <= 'Z'))
-		{
-			return 3;
-		}
+    // Check validation
+    Board tempBoard(*board);
+    tempBoard.movePiece(currentRow, currentCol, newRow, newCol);
+    char color = isupper(this->colorAndType) ? 'w' : 'b';
+    // In each piece's isValidMove function, before checking for check:
+    if (!isValidationCheck) {
+        Board tempBoard(*board);
+        if (game->isInCheck(color, &tempBoard, true)) {  // Pass true for validation check
+            return INVALID_MOVE_CAUSE_CHECK;
+        }
+    }
 
-		if (piece->getColorAndType() != '0')
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-	return 6;
+    return (destPiece->getColorAndType() != '0') ? VALID_MOVE_ATE_PIECE : SUCCESSFUL_MOVE;
 }

@@ -58,6 +58,44 @@ Board::Board()
 	}
 }
 
+Board::Board(const Board& other) {
+	// Deep copy each piece
+	for (int i = 0; i < ROW; i++) {
+		for (int j = 0; j < COL; j++) {
+			ChessPiece* piece = other.board[i][j];
+			std::string pos = "";
+			pos += (char)(j + 'a');
+			pos += (char)(i + '1');
+
+			// Create new piece based on type
+			char type = piece->getColorAndType();
+			switch (toupper(type)) {
+			case 'P':
+				board[i][j] = new Pawn(pos, type);
+				break;
+			case 'R':
+				board[i][j] = new Rook(pos, type);
+				break;
+			case 'N':
+				board[i][j] = new Knight(pos, type);
+				break;
+			case 'B':
+				board[i][j] = new Bishop(pos, type);
+				break;
+			case 'Q':
+				board[i][j] = new Queen(type);
+				break;
+			case 'K':
+				board[i][j] = new King(type);
+				break;
+			case '0':
+				board[i][j] = new NullPiece(pos);
+				break;
+			}
+		}
+	}
+}
+
 Board::~Board()
 {
 	// Delete all the pieces
@@ -78,19 +116,16 @@ ChessPiece* Board::getPiece(std::string& pos) const
 	return board[row][col];
 }
 
-int Board::movePiece(std::string& startPos, std::string& endPos, char currentPlayer)
+void Board::movePiece(int currentRow, int currentCol, int newRow, int newCol)
 {
-	// Not implemented
-	// Should return:
-	// 0 if the move was successful
-	// 1 - Valid move, ate a piece
-	// 2 - invalid move - in the source pos there is no piece of the current player
-	// 3 - invalid move - in the destination pos there is a piece of the current player
-	// 4 - invalid move - the move will cause a check on the current player
-	// 5 - invalid move - the indexes of the positions are out of bounds
-	// 6 - invalid move - illegal move for the piece
-	// 7 - invalid move - the source and destination positions are the same
-	// 8 - valid move - checkmate - BONUS
-
-	return -1;
+	// Move the piece
+	board[newRow][newCol] = board[currentRow][currentCol];
+	// Set the current position of the piece
+	std::string newPos = "";
+	newPos += (char)(newCol + 'a');
+	newPos += (char)(newRow + '1');
+	board[newRow][newCol]->setPos(newPos);
+	// Set the old position to nullptr
+	ChessPiece* nullPiece = new NullPiece(newPos);
+	board[currentRow][currentCol] = nullPiece;
 }

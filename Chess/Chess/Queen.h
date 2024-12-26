@@ -11,7 +11,7 @@ public:
 
 	~Queen();
 
-	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board) const override;
+	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck) const override;
 };
 
 #endif

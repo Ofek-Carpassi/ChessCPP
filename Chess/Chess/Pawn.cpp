@@ -10,95 +10,69 @@ Pawn::~Pawn()
 {
 }
 
-int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board) const
-{
-	int currentRow = currentPos[1] - '1';
-	int currentCol = currentPos[0] - 'a';
+int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck) const {
+    int currentRow = currentPos[1] - '1';
+    int currentCol = currentPos[0] - 'a';
+    int newRow = newPos[1] - '1';
+    int newCol = newPos[0] - 'a';
 
-	int newRow = newPos[1] - '1';
-	int newCol = newPos[0] - 'a';
+    if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) {
+        return INVALID_MOVE_OUT_OF_BOUNDS;
+    }
 
-	// Check for all 9 cases of returns
-	// 0 if the move was successful
-	// 1 - Valid move, ate a piece
-	// 2 - invalid move - in the source pos there is no piece of the current player
-	// 3 - invalid move - in the destination pos there is a piece of the current player
-	// 4 - invalid move - the move will cause a check on the current player
-	// 5 - invalid move - the indexes of the positions are out of bounds
-	// 6 - invalid move - illegal move for the piece
-	// 7 - invalid move - the source and destination positions are the same
-	// 8 - valid move - checkmate - BONUS
+    if (currentPos == newPos) {
+        return INVALID_MOVE_SAME_POS;
+    }
 
-	// Check if the new position is out of bounds
-	if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7)
-	{
-		return 5;
-	}
+    // Determine direction based on color (white moves up, black moves down)
+    int direction = isupper(colorAndType) ? 1 : -1;
 
-	// Check if the source and destination positions are the same
-	if (currentPos == newPos)
-	{
-		return 7;
-	}
+    // Regular one square forward move
+    if (newCol == currentCol && newRow == currentRow + direction) {
+        if (board->getPiece(newPos)->getColorAndType() != '0') {
+            return INVALID_MOVE_ILLEGAL_MOVE;
+        }
+        return SUCCESSFUL_MOVE;
+    }
 
-	// if he didn't move forward and didn't move in a diagonal one square
-	if (abs(newRow - currentRow) == 1 && abs(newCol - currentCol) == 1 && board->getPiece(newPos)->getColorAndType() == '0')
-	{
-		return 6;
-	}
-	else if (abs(newRow - currentRow) == 1 && abs(newCol - currentCol) == 1 && board->getPiece(newPos)->getColorAndType() != '0')
-	{
-		return 1;
-	}	
-	else if (abs(newRow - currentRow) == 1 && abs(newCol - currentCol) == 0 && board->getPiece(newPos)->getColorAndType() == '0')
-	{
-		return 0;
-	}
-	else if (abs(newRow - currentRow) == 1 && abs(newCol - currentCol) == 0 && board->getPiece(newPos)->getColorAndType() != '0')
-	{
-		return 6;
-	}
-	else if (abs(newRow - currentRow) == 2 && abs(newCol - currentCol) == 0 && board->getPiece(newPos)->getColorAndType() == '0')
-	{
-		if (colorAndType == 'P' && currentRow == 1)
-		{
-			// Check if there is a piece in the way
-			std::string pos = "";
-			// Get the piece between newPos and currentPos
-			pos += currentPos[0];
-			pos += (char)(currentRow + 1 + '0');
-			if (board->getPiece(pos)->getColorAndType() != '0')
-			{
-				return 6;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		else if (colorAndType == 'p' && currentRow == 6)
-		{
-			// Check if there is a piece in the way
-			std::string pos = "";
-			// Get the piece between newPos and currentPos
-			pos += currentPos[0];
-			pos += (char)(currentRow - 1 + '0');
-			if (board->getPiece(pos)->getColorAndType() != '0')
-			{
-				return 6;
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		else
-		{
-			return 6;
-		}
-	}
-	else
-	{
-		return 6;
-	}
+    // Initial two square move
+    bool isInitialPosition = (isupper(colorAndType) && currentRow == 1) ||
+        (!isupper(colorAndType) && currentRow == 6);
+    if (isInitialPosition && newCol == currentCol && newRow == currentRow + (2 * direction)) {
+        // Check if path is clear
+        std::string midPos = "";
+        midPos += currentPos[0];
+        midPos += (char)(currentRow + direction + '1');
+        if (board->getPiece(midPos)->getColorAndType() != '0' ||
+            board->getPiece(newPos)->getColorAndType() != '0') {
+            return INVALID_MOVE_ILLEGAL_MOVE;
+        }
+        return SUCCESSFUL_MOVE;
+    }
+
+    // Diagonal capture
+    if (abs(newCol - currentCol) == 1 && newRow == currentRow + direction) {
+        ChessPiece* destPiece = board->getPiece(newPos);
+        if (destPiece->getColorAndType() == '0') {
+            return INVALID_MOVE_ILLEGAL_MOVE;
+        }
+        bool isSameColor = (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType));
+        if (isSameColor) {
+            return INVALID_MOVE_PIECE_OF_PLAYER;
+        }
+        return VALID_MOVE_ATE_PIECE;
+    }
+
+    // Check validation
+    Board tempBoard(*board);
+    tempBoard.movePiece(currentRow, currentCol, newRow, newCol);
+    char color = isupper(this->colorAndType) ? 'w' : 'b';
+    if (!isValidationCheck) {
+        Board tempBoard(*board);
+        if (game->isInCheck(color, &tempBoard, true)) {  // Pass true for validation check
+            return INVALID_MOVE_CAUSE_CHECK;
+        }
+    }
+
+    return INVALID_MOVE_ILLEGAL_MOVE;
 }

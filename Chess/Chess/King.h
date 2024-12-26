@@ -4,6 +4,12 @@
 
 #include "ChessPiece.h"
 #include "Board.h"
+#include "MoveCase.h"
+#include "Game.h"
+
+class Board;
+
+class Game;
 
 class King : public ChessPiece
 {
@@ -12,7 +18,6 @@ public:
 
 	~King();
 
-	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board) const override;
+	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck) const override;
 };
-
-#endif
+#endif // KING_H

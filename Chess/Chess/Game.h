@@ -5,27 +5,31 @@
 #include <string>
 #include "Board.h"
 #include "Player.h"
+#include <iostream>
+#include "MoveCase.h"
 
-class Game
-{
+class Board;
+class Player;
+
+class Game {
 private:
-	char currentPlayer;
-	Player* whitePlayer;
-	Player* blackPlayer;
-	Board* board;
-	std::string startPos;
-	bool isInPlay;
+    char currentPlayer;
+    Player* whitePlayer;
+    Player* blackPlayer;
+    Board* board;
+    bool isInPlay;
+
+    void displayBoard() const;
+    void switchPlayer();
+    bool isValidMoveFormat(const std::string& move) const;
+    std::string handleMove();
+    void printCurrentPlayerTurn() const;
 
 public:
-	Game();
-
-	~Game();
-
-	void startGame();
-
-	void isInCheck();
-
-	std::string initStartPos();
+    Game();
+    ~Game();
+    void startGame();
+    bool isInCheck(char color, Board* gameBoard, bool isValidationCheck = false);
 };
 
 #endif

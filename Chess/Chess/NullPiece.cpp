@@ -8,7 +8,7 @@ NullPiece::NullPiece(std::string pos)
 
 NullPiece::~NullPiece() {}
 
-int NullPiece::isValidMove(std::string& currentPos, std::string& newPos, Board* board) const
+int NullPiece::isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck) const
 {
 	return 6;
 }

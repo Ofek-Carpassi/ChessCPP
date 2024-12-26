@@ -23,60 +23,44 @@ King::~King()
 
 // NO NEED TO PASS CURRENT PLAYER BECAUSE THE GAME WILL HANDLE THAT AND ONLY CHECK IF MOVE IS VALID IF IT IS THE CURRENT PLAYER'S TURN
 
-int King::isValidMove(std::string& currentPos, std::string& newPos, Board* board) const
-{
-	int currentRow = currentPos[1] - '1';
-	int currentCol = currentPos[0] - 'a'; // between 0 and 7
+int King::isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck) const {
+    int currentRow = currentPos[1] - '1';
+    int currentCol = currentPos[0] - 'a';
+    int newRow = newPos[1] - '1';
+    int newCol = newPos[0] - 'a';
 
-	int newRow = newPos[1] - '1';
-	int newCol = newPos[0] - 'a';
+    // Basic validation checks
+    if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) {
+        return INVALID_MOVE_OUT_OF_BOUNDS;
+    }
 
-	// Check for all 9 cases of returns
-	// 0 if the move was successful
-	// 1 - Valid move, ate a piece
-	// 2 - invalid move - in the source pos there is no piece of the current player
-	// 3 - invalid move - in the destination pos there is a piece of the current player
-	// 4 - invalid move - the move will cause a check on the current player
-	// 5 - invalid move - the indexes of the positions are out of bounds
-	// 6 - invalid move - illegal move for the piece
-	// 7 - invalid move - the source and destination positions are the same
-	// 8 - valid move - checkmate - BONUS
+    if (currentPos == newPos) {
+        return INVALID_MOVE_SAME_POS;
+    }
 
-	// Check if the new position is out of bounds
-	if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7)
-	{
-		return 5;
-	}
+    if (abs(newRow - currentRow) > 1 || abs(newCol - currentCol) > 1) {
+        return INVALID_MOVE_ILLEGAL_MOVE;
+    }
 
-	// Check if the source and destination positions are the same
-	if (currentPos == newPos)
-	{
-		return 7;
-	}
+    ChessPiece* destPiece = board->getPiece(newPos);
+    bool isSameColor = (destPiece->getColorAndType() != '0' && (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType)));
 
-	// Check if the move is legal
-	if (abs(newRow - currentRow) > 1 || abs(newCol - currentCol) > 1)
-	{
-		return 6;
-	}
+    if (isSameColor) {
+        return INVALID_MOVE_PIECE_OF_PLAYER;
+    }
 
-	// Check if the destination position has a piece of the same color
-	ChessPiece* piece = board->getPiece(newPos);
-	char colorAndType = piece->getColorAndType();
-	// Check if both of the characters are the same case (both upper or both lower)
-	if (colorAndType != '0' && (colorAndType >= 'A' && colorAndType <= 'Z') == (this->getColorAndType() >= 'A' && this->getColorAndType() <= 'Z'))
-	{
-		return 3;
-	}
+    // Create a temporary board to test the move
+    Board tempBoard(*board);
+    tempBoard.movePiece(currentRow, currentCol, newRow, newCol);
 
-	// Check if the move will cause a check on the current player
-	// Not implemented
+    // Check if move puts own king in check
+    char color = isupper(this->colorAndType) ? 'w' : 'b';
+    if (!isValidationCheck) {
+        Board tempBoard(*board);
+        if (game->isInCheck(color, &tempBoard, true)) {  // Pass true for validation check
+            return INVALID_MOVE_CAUSE_CHECK;
+        }
+    }
 
-	// Check if the move is valid and if it ate a piece
-	if (piece->getColorAndType() != '0')
-	{
-		return 1;
-	}
-
-	return 0;
+    return (destPiece->getColorAndType() != '0') ? VALID_MOVE_ATE_PIECE : SUCCESSFUL_MOVE;
 }
