@@ -13,12 +13,14 @@ class Player;
 
 class Game {
 private:
+	// Variables
     char currentPlayer;
     Player* whitePlayer;
     Player* blackPlayer;
     Board* board;
     bool isInPlay;
-
+    
+    // Methods for the game handling
     void displayBoard() const;
     void switchPlayer();
     bool isValidMoveFormat(const std::string& move) const;
@@ -26,6 +28,7 @@ private:
     void printCurrentPlayerTurn() const;
 
 public:
+	// Constructors and Destructors
     Game();
     ~Game();
     void startGame();

@@ -6,7 +6,6 @@
 #include "Game.h"
 
 class Game;
-
 class Board;
 
 class ChessPiece
@@ -21,6 +20,7 @@ public:
 
     virtual void setPos(std::string& pos);
 
+	// A pure virtual function that will be implemented by the derived classes
 	virtual int isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck = false) const = 0;
 };
 

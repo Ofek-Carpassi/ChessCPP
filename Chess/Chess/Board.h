@@ -14,6 +14,7 @@ class ChessPiece;
 class Board
 {
 private:
+	// 2D array of ChessPiece pointers
 	ChessPiece* board[COL][ROW];
 
 public:
@@ -29,8 +30,6 @@ public:
 
 	// Move a piece
 	void movePiece(int currentRow, int currentCol, int newRow, int newCol);
-
-	bool isInCheck(char color);
 };
 
 #endif

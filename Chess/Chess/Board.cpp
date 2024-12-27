@@ -19,6 +19,7 @@ Board::Board()
 			std::string pos = "";
 			pos += (char)(j + 'a');
 			pos += (char)(i + '1');
+			// Save a null piece in the board
 			board[i][j] = new NullPiece(pos);
 		}
 	}
@@ -58,11 +59,15 @@ Board::Board()
 	}
 }
 
-Board::Board(const Board& other) {
-	// Deep copy each piece
+Board::Board(const Board& other) 
+{
+	// Copy the pieces from the other board
 	for (int i = 0; i < ROW; i++) {
 		for (int j = 0; j < COL; j++) {
+			// Get the piece from the other board
 			ChessPiece* piece = other.board[i][j];
+
+			// Translates the indexes to the position on the board (<letter><number>)
 			std::string pos = "";
 			pos += (char)(j + 'a');
 			pos += (char)(i + '1');
