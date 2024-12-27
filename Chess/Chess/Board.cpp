@@ -134,3 +134,9 @@ void Board::movePiece(int currentRow, int currentCol, int newRow, int newCol)
 	ChessPiece* nullPiece = new NullPiece(newPos);
 	board[currentRow][currentCol] = nullPiece;
 }
+
+void Board::setPiece(int row, int col, ChessPiece* piece)
+{
+	delete board[row][col];
+	board[row][col] = piece;
+}

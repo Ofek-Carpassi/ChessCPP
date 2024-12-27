@@ -1,5 +1,11 @@
 #include "Queen.h"
 
+Queen::Queen(std::string& pos, char colorAndType)
+{
+	this->colorAndType = colorAndType;
+	this->currentPos = pos;
+}
+
 Queen::Queen(char colorAndType)
 {
 	std::string pos;
@@ -13,7 +19,6 @@ Queen::Queen(char colorAndType)
 		pos = "d8";
 	}
 
-	// set the king pos using chess piece setPos func
 	this->colorAndType = colorAndType;
 	this->currentPos = pos;
 }

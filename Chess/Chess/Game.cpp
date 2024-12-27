@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "Pawn.h"
+#include "NullPiece.h"
 
 void Game::displayBoard() const {
 	// Print the board piece by piece (also print the row and column labels)
@@ -107,6 +109,7 @@ void Game::startGame() {
         switch (moveResult) {
         case SUCCESSFUL_MOVE:
         case VALID_MOVE_ATE_PIECE:
+        case VALID_MOVE_PROMOTION:
         {
 			// The move was successful, so move the piece
 
@@ -116,14 +119,26 @@ void Game::startGame() {
             int endRow = endPos[1] - '1';
             int endCol = endPos[0] - 'a';
 
-			// Move the piece
-            board->movePiece(startRow, startCol, endRow, endCol);
+			if (moveResult == VALID_MOVE_PROMOTION) {
+				// Get the promotion type from the user
+				char promotionType = '0';
+                do {
+					std::cout << "Promote to (Q, R, N, B): ";
+					std::cin >> promotionType;
+					promotionType = toupper(promotionType);
+				} while (promotionType != 'Q' && promotionType != 'R' && promotionType != 'N' && promotionType != 'B');
 
-            // Check if opponent is in check
-            char opponentColor = (currentPlayer == 'w') ? 'b' : 'w';
-            if (isInCheck(opponentColor, board, false)) {
-                std::cout << "Check!\n";
-            }
+				// Promote the pawn
+				ChessPiece* promotedPiece = dynamic_cast<Pawn*>(piece)->promote(endPos, promotionType);
+				board->setPiece(endRow, endCol, promotedPiece);
+
+				// Remove the pawn from the board
+				board->setPiece(startRow, startCol, new NullPiece(startPos));
+			}
+			else {
+				// Move the piece to the new position
+				board->movePiece(startRow, startCol, endRow, endCol);
+			}
             
 			// change player
             switchPlayer();

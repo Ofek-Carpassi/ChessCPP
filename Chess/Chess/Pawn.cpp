@@ -37,6 +37,10 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
         if (board->getPiece(newPos)->getColorAndType() != '0') {
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
+		// Check if the pawn is at the end of the board (promotion)
+        if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0)) {
+            return VALID_MOVE_PROMOTION;
+        }
         return SUCCESSFUL_MOVE;
     }
 
@@ -67,6 +71,10 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
         if (isSameColor) {
             return INVALID_MOVE_PIECE_OF_PLAYER;
         }
+		// Check if the pawn is at the end of the board (promotion)
+		if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0)) {
+			return VALID_MOVE_PROMOTION;
+		}
         return VALID_MOVE_ATE_PIECE;
     }
 
@@ -87,4 +95,34 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     }
 
     return INVALID_MOVE_ILLEGAL_MOVE;
+}
+
+ChessPiece* Pawn::promote(std::string& pos, char type) const
+{
+	type = toupper(type);
+
+    if (type == 'Q')
+    {
+		char color = (isupper(colorAndType) ? 'Q' : 'q');
+		return new Queen(pos, color);
+	}
+    else if (type == 'R')
+    {
+		char color = (isupper(colorAndType) ? 'R' : 'r');
+		return new Rook(pos, color);
+	}
+    else if (type == 'N')
+    {
+		char color = (isupper(colorAndType) ? 'N' : 'n');
+		return new Knight(pos, color);
+	}
+    else if (type == 'B')
+    {
+		char color = (isupper(colorAndType) ? 'B' : 'b');
+		return new Bishop(pos, color);
+	}
+    else
+    {
+		return nullptr;
+    }
 }

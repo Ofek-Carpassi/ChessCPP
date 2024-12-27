@@ -30,6 +30,8 @@ public:
 
 	// Move a piece
 	void movePiece(int currentRow, int currentCol, int newRow, int newCol);
+
+	void setPiece(int row, int col, ChessPiece* piece);
 };
 
 #endif

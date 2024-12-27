@@ -7,6 +7,8 @@
 class Queen : public ChessPiece
 {
 public:
+	Queen(std::string& pos, char colorAndType);
+
 	Queen(char colorAndType);
 
 	~Queen();
