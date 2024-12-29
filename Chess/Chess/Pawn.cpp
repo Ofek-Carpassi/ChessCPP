@@ -19,12 +19,14 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     int newCol = newPos[0] - 'a';
 
     // If the destination is out of bounds (array is 8x8)
-    if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7) {
+    if (newRow < 0 || newRow > 7 || newCol < 0 || newCol > 7)
+    {
         return INVALID_MOVE_OUT_OF_BOUNDS;
     }
 
     // If the destination is the same as the current position
-    if (currentPos == newPos) {
+    if (currentPos == newPos)
+    {
         return INVALID_MOVE_SAME_POS;
     }
 
@@ -32,14 +34,17 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     int direction = isupper(colorAndType) ? 1 : -1;
 
     // If the pawn moves forward one square
-    if (newCol == currentCol && newRow == currentRow + direction) {
+    if (newCol == currentCol && newRow == currentRow + direction)
+    {
         // Check if path is clear
-        if (board->getPiece(newPos)->getColorAndType() != '#') {  // Empty square is '#'
+        if (board->getPiece(newPos)->getColorAndType() != '#')
+        {  // Empty square is '#'
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
         // Check if the pawn is at the end of the board (promotion)
-        if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0)) {
-            return VALID_MOVE_PROMOTION;
+        if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0))
+        {
+            return SUCCESSFUL_MOVE;
         }
         return SUCCESSFUL_MOVE;
     }
@@ -54,27 +59,32 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
         midPos += (char)(currentRow + direction + '1');  // Middle position
 
         // Check if both the middle and destination squares are empty
-        if (board->getPiece(midPos)->getColorAndType() != '#' || board->getPiece(newPos)->getColorAndType() != '#') {
+        if (board->getPiece(midPos)->getColorAndType() != '#' || board->getPiece(newPos)->getColorAndType() != '#')
+        {
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
         return SUCCESSFUL_MOVE;
     }
 
     // Diagonal capture (one row forward and one column to the left or right)
-    if (abs(newCol - currentCol) == 1 && newRow == currentRow + direction) {
+    if (abs(newCol - currentCol) == 1 && newRow == currentRow + direction)
+    {
         // Make sure there is a piece to capture
         ChessPiece* destPiece = board->getPiece(newPos);
-        if (destPiece->getColorAndType() == '#') {  // No piece to capture
+        if (destPiece->getColorAndType() == '#') // No piece to capture
+        {  
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
         // Make sure the piece is of the opposite color
         bool isSameColor = (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType));
-        if (isSameColor) {
+        if (isSameColor)
+        {
             return INVALID_MOVE_PIECE_OF_PLAYER;
         }
         // Check if the pawn is at the end of the board (promotion)
-        if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0)) {
-            return VALID_MOVE_PROMOTION;
+        if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0))
+        {
+            return SUCCESSFUL_MOVE;
         }
         return VALID_MOVE_ATE_PIECE;
     }
@@ -86,8 +96,10 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     char color = isupper(this->colorAndType) ? 'w' : 'b';  // Get the color of the piece (to know on which side to check for check)
 
     // If checking for a check situation, ensure we avoid an infinite loop
-    if (!isValidationCheck) {
-        if (game->isInCheck(color, &tempBoard, true)) {
+    if (!isValidationCheck)
+    {
+        if (game->isInCheck(color, &tempBoard, true))
+        {
             return INVALID_MOVE_CAUSE_CHECK;
         }
     }

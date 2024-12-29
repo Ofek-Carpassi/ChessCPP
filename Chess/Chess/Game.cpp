@@ -19,7 +19,8 @@ std::string Game::checkMove(std::string move)
     ChessPiece* piece = board->getPiece(startPos);
 
     // Check if there is a piece at the starting position
-    if (piece->getColorAndType() == '#') {
+    if (piece->getColorAndType() == '#')
+    {
         std::cout << "No piece at starting position!\n";
 		return "2\0";
     }
@@ -37,7 +38,6 @@ std::string Game::checkMove(std::string move)
     switch (moveResult) {
     case SUCCESSFUL_MOVE:
     case VALID_MOVE_ATE_PIECE:
-    case VALID_MOVE_PROMOTION:
     {
         // The move was successful, so move the piece
 
@@ -47,26 +47,8 @@ std::string Game::checkMove(std::string move)
         int endRow = endPos[1] - '1';
         int endCol = endPos[0] - 'a';
 
-        if (moveResult == VALID_MOVE_PROMOTION) {
-            // Get the promotion type from the user
-            char promotionType = '0';
-            do {
-                std::cout << "Promote to (Q, R, N, B): ";
-                std::cin >> promotionType;
-                promotionType = toupper(promotionType);
-            } while (promotionType != 'Q' && promotionType != 'R' && promotionType != 'N' && promotionType != 'B');
-
-            // Promote the pawn
-            ChessPiece* promotedPiece = dynamic_cast<Pawn*>(piece)->promote(endPos, promotionType);
-            board->setPiece(endRow, endCol, promotedPiece);
-
-            // Remove the pawn from the board
-            board->setPiece(startRow, startCol, new NullPiece(startPos));
-        }
-        else {
-            // Move the piece to the new position
-            board->movePiece(startRow, startCol, endRow, endCol);
-        }
+        // Move the piece to the new position
+        board->movePiece(startRow, startCol, endRow, endCol);
 
         // Get the new board
         boardString = board->toString();
