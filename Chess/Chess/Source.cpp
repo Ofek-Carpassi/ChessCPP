@@ -12,8 +12,7 @@ using std::cout;
 using std::endl;
 using std::string;
 
-/*
-void main()
+void main1()
 {
 	srand(time_t(NULL));
 
@@ -77,4 +76,3 @@ void main()
 
 	p.close();
 }
-*/

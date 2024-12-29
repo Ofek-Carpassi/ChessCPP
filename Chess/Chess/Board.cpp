@@ -93,7 +93,7 @@ Board::Board(const Board& other)
 			case 'K':
 				board[i][j] = new King(type);
 				break;
-			case '0':
+			case '#':
 				board[i][j] = new NullPiece(pos);
 				break;
 			}

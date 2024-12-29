@@ -2,7 +2,8 @@
 #include "Pawn.h"
 #include "NullPiece.h"
 
-void Game::displayBoard() const {
+void Game::displayBoard(){
+    int indx = 0;
 	// Print the board piece by piece (also print the row and column labels)
     std::cout << "\n  a b c d e f g h\n";
     std::cout << "  ---------------\n";
@@ -15,7 +16,10 @@ void Game::displayBoard() const {
             pos += (char)(row + '1');
             char piece = board->getPiece(pos)->getColorAndType();
             std::cout << piece << " ";
+            msgToGraphics[indx] = piece;
+            indx++;
         }
+        
         std::cout << "|" << row + 1 << "\n";
     }
     std::cout << "  ---------------\n";
@@ -36,9 +40,20 @@ bool Game::isValidMoveFormat(const std::string& move) const {
         move[3] >= '1' && move[3] <= '8';
 }
 
-void Game::printCurrentPlayerTurn() const {
+void Game::printCurrentPlayerTurn(){
 	// Print the current player's turn
-    std::cout << "\n" << (currentPlayer == 'w' ? "White" : "Black") << "'s turn\n";
+    if (currentPlayer == 'w')
+    {
+        std::cout << "\n" << "White";
+        msgToGraphics[64] = '0';
+    }
+    else
+    {
+        std::cout << "\n" << "Black";
+        msgToGraphics[64] = '1';
+    }
+
+    std::cout << "'s turn\n";
 }
 
 std::string Game::handleMove() {
@@ -46,9 +61,12 @@ std::string Game::handleMove() {
     std::string move;
     do {
 		// Print the prompt and get the move
-        std::cout << "Enter move (e.g., e2e4): ";
-        std::cin >> move;
+        //std::cout << "Enter move (e.g., e2e4): ";
+        //std::cin >> move;
 
+        // get message from graphics
+        move = p.getMessageFromGraphics();
+        
 		// Check if the user wants to quit - if so, end the game
         if (move == "quit" || move == "exit") {
             isInPlay = false;
@@ -68,16 +86,45 @@ std::string Game::handleMove() {
 
 void Game::startGame() {
 	// Welcome message
-    std::cout << "\nWelcome to Console Chess!\n";
-    std::cout << "Enter moves in format: from-to (e.g., e2e4)\n";
-    std::cout << "Enter 'quit' or 'exit' to end game\n";
+    //std::cout << "\nWelcome to Console Chess!\n";
+    //std::cout << "Enter moves in format: from-to (e.g., e2e4)\n";
+    //std::cout << "Enter 'quit' or 'exit' to end game\n";
 
+    srand(time_t(NULL));
+    
+    bool isConnect = p.connect();
+
+    std::string ans;
+    while (!isConnect)
+    {
+        std::cout << "cant connect to graphics" << std::endl;
+        std::cout << "Do you try to connect again or exit? (0-try again, 1-exit)" << std::endl;
+        std::cin >> ans;
+
+        if (ans == "0")
+        {
+            std::cout << "trying connect again.." << std::endl;
+            Sleep(5000);
+            isConnect = p.connect();
+        }
+        else
+        {
+            p.close();
+            return;
+        }
+    }
+
+    
 	// While not checkmate or quit
     isInPlay = true;
     while (isInPlay) {
         // Print the current state
+        
         displayBoard();
         printCurrentPlayerTurn();
+        msgToGraphics[65] = '\0';
+
+        p.sendMessageToGraphics(msgToGraphics);   // send the board string
 
 		// Handle the move and make sure we are still playing
         std::string move = handleMove();
@@ -91,8 +138,13 @@ void Game::startGame() {
         ChessPiece* piece = board->getPiece(startPos);
 
 		// Check if there is a piece at the starting position
-        if (piece->getColorAndType() == '0') {
+        if (piece->getColorAndType() == '#') {
             std::cout << "No piece at starting position!\n";
+
+            char* msg = NULL;
+            msg += INVALID_MOVE_NO_PIECE + '0';
+            msg += 0;
+            p.sendMessageToGraphics(msg);
             continue;
         }
 
@@ -100,19 +152,35 @@ void Game::startGame() {
         bool isPieceWhite = isupper(piece->getColorAndType());
         if ((currentPlayer == 'w' && !isPieceWhite) || (currentPlayer == 'b' && isPieceWhite)) {
             std::cout << "That's not your piece!\n";
+
+            char* msg = NULL;
+            msg += INVALID_MOVE_NO_PIECE + '0';
+            msg += 0;
+            p.sendMessageToGraphics(msg);
             continue;
         }
-
+        std::cout << "\n----------\n" << startPos << "\n" << endPos << "\n----------\n";
 		// Check if the move is valid and handle the result accordingly
         int moveResult = piece->isValidMove(startPos, endPos, board, this);
+        std::cout << "\n----------\n" << moveResult << "\n----------\n";
+        char msg[2];
 
         switch (moveResult) {
         case SUCCESSFUL_MOVE:
+        { 
+            msg[0] = (char)(0 + '0');
+            break;
+        }
         case VALID_MOVE_ATE_PIECE:
+        {
+            msg[0] = (char)(1 + '0');
+            break;
+        }
         case VALID_MOVE_PROMOTION:
         {
 			// The move was successful, so move the piece
-
+            msg[0] = (char)(9 + '0');
+            
 			// Translate the move to row and column indices
             int startRow = startPos[1] - '1';
             int startCol = startPos[0] - 'a';
@@ -147,28 +215,38 @@ void Game::startGame() {
 
         case INVALID_MOVE_NO_PIECE:
             std::cout << "No piece at starting position!\n";
+            msg[0] = (char)(2 + '0');
             break;
         case INVALID_MOVE_PIECE_OF_PLAYER:
             std::cout << "Cannot capture your own piece!\n";
+            msg[0] = (char)(3 + '0');
             break;
         case INVALID_MOVE_CAUSE_CHECK:
             std::cout << "Move would put/leave you in check!\n";
+            msg[0] = (char)(4 + '0');
             break;
         case INVALID_MOVE_OUT_OF_BOUNDS:
             std::cout << "Move is out of bounds!\n";
+            msg[0] = (char)(5 + '0');
             break;
         case INVALID_MOVE_ILLEGAL_MOVE:
             std::cout << "Illegal move for this piece!\n";
+            msg[0] = (char)(6 + '0');
             break;
         case INVALID_MOVE_SAME_POS:
             std::cout << "Start and end positions are the same!\n";
+            msg[0] = (char)(7 + '0');
             break;
         default:
             std::cout << "Invalid move!\n";
+            break;
         }
+        msg[1] = 0;
+        p.sendMessageToGraphics(msg);
     }
 
     std::cout << "\nGame Over!\n";
+    p.close();
 }
 
 Game::Game() {

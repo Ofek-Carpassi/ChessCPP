@@ -3,7 +3,7 @@
 NullPiece::NullPiece(std::string pos)
 {
 	this->currentPos = pos;
-	this->colorAndType = '0';
+	this->colorAndType = '#';
 }
 
 NullPiece::~NullPiece() {}

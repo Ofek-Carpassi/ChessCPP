@@ -38,7 +38,11 @@ int Rook::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     int colStep = (newCol == currentCol) ? 0 : (newCol > currentCol) ? 1 : -1;
 
 	// iterate through the path to check if there are any pieces in the way
-    for (int i = 1; i < std::max(abs(newRow - currentRow), abs(newCol - currentCol)); i++) 
+    int rowDistance = abs(newRow - currentRow);
+    int colDistance = abs(newCol - currentCol);
+    int maxDistance = (rowDistance > colDistance) ? rowDistance : colDistance;
+
+    for (int i = 1; i < maxDistance; i++)
     {
         std::string pos = "";
         pos += (char)(currentCol + (i * colStep) + 'a');

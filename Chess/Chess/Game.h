@@ -8,6 +8,9 @@
 #include <iostream>
 #include "MoveCase.h"
 
+#include "Pipe.h"
+//#include <thread>
+
 class Board;
 class Player;
 
@@ -19,13 +22,17 @@ private:
     Player* blackPlayer;
     Board* board;
     bool isInPlay;
+
+    Pipe p;
+    char msgToGraphics[66];
+    
     
     // Methods for the game handling
-    void displayBoard() const;
+    void displayBoard();
     void switchPlayer();
     bool isValidMoveFormat(const std::string& move) const;
     std::string handleMove();
-    void printCurrentPlayerTurn() const;
+    void printCurrentPlayerTurn();
 
 public:
 	// Constructors and Destructors
