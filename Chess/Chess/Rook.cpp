@@ -47,14 +47,14 @@ int Rook::isValidMove(std::string& currentPos, std::string& newPos, Board* board
         std::string pos = "";
         pos += (char)(currentCol + (i * colStep) + 'a');
         pos += (char)(currentRow + (i * rowStep) + '1');
-        if (board->getPiece(pos)->getColorAndType() != '0') {
+        if (board->getPiece(pos)->getColorAndType() != '#') {
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
     }
 
 	// Check if the destination has a piece of the same color
     ChessPiece* destPiece = board->getPiece(newPos);
-    bool isSameColor = (destPiece->getColorAndType() != '0' && (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType)));
+    bool isSameColor = (destPiece->getColorAndType() != '#' && (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType)));
 
 	// If the destination has a piece of the same color - invalid move
     if (isSameColor) {
@@ -78,5 +78,5 @@ int Rook::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     }
 
     // If the destination has a piece of the opposite color, the move is valid and the player can eat the piece
-    return (destPiece->getColorAndType() != '0') ? VALID_MOVE_ATE_PIECE : SUCCESSFUL_MOVE;
+    return (destPiece->getColorAndType() != '#') ? VALID_MOVE_ATE_PIECE : SUCCESSFUL_MOVE;
 }

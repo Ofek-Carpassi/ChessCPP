@@ -1,7 +1,8 @@
 #include "Game.h"
-
-int main() {
+/*
+int amaina() {
     Game game;
     game.startGame();
     return 0;
 }
+*/

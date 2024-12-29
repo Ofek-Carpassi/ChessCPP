@@ -53,7 +53,7 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
         midPos += currentPos[0];
         midPos += (char)(currentRow + direction + '1');
 		// if there is no piece in the middle or the destination
-        if (board->getPiece(midPos)->getColorAndType() != '0' ||  board->getPiece(newPos)->getColorAndType() != '0') {
+        if (board->getPiece(midPos)->getColorAndType() != '#' ||  board->getPiece(newPos)->getColorAndType() != '#') {
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
         return SUCCESSFUL_MOVE;
@@ -63,7 +63,7 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     if (abs(newCol - currentCol) == 1 && newRow == currentRow + direction) {
 		// Make sure there is a piece to capture
         ChessPiece* destPiece = board->getPiece(newPos);
-        if (destPiece->getColorAndType() == '0') {
+        if (destPiece->getColorAndType() == '#') {
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
 		// Make sure the piece is of the opposite color

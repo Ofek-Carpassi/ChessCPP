@@ -69,7 +69,7 @@ int Queen::isValidMove(std::string& currentPos, std::string& newPos, Board* boar
         pos += (char)(currentRow + (i * rowStep) + '1');
 
 		// If there is a piece in the way (not a null piece)
-        if (board->getPiece(pos)->getColorAndType() != '0') 
+        if (board->getPiece(pos)->getColorAndType() != '#') 
         {
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
@@ -77,7 +77,7 @@ int Queen::isValidMove(std::string& currentPos, std::string& newPos, Board* boar
 
 	// Check if the destination has a piece of the same color (if they do, the move is invalid)
     ChessPiece* destPiece = board->getPiece(newPos);
-    bool isSameColor = (destPiece->getColorAndType() != '0' && (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType)));
+    bool isSameColor = (destPiece->getColorAndType() != '#' && (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType)));
     if (isSameColor) {
         return INVALID_MOVE_PIECE_OF_PLAYER;
     }
@@ -99,5 +99,5 @@ int Queen::isValidMove(std::string& currentPos, std::string& newPos, Board* boar
     }
 
     // If the destination has a piece of the opposite color, the move is valid and the player can eat the piece
-    return (destPiece->getColorAndType() != '0') ? VALID_MOVE_ATE_PIECE : SUCCESSFUL_MOVE;
+    return (destPiece->getColorAndType() != '#') ? VALID_MOVE_ATE_PIECE : SUCCESSFUL_MOVE;
 }

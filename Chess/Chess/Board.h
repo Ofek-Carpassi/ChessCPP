@@ -32,6 +32,8 @@ public:
 	void movePiece(int currentRow, int currentCol, int newRow, int newCol);
 
 	void setPiece(int row, int col, ChessPiece* piece);
+
+	std::string toString() const;
 };
 
 #endif

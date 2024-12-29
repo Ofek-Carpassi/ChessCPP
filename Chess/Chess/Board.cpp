@@ -140,3 +140,16 @@ void Board::setPiece(int row, int col, ChessPiece* piece)
 	delete board[row][col];
 	board[row][col] = piece;
 }
+
+std::string Board::toString() const
+{
+	std::string boardStr = "";
+	for (int i = 0; i < ROW; i++)
+	{
+		for (int j = 0; j < COL; j++)
+		{
+			boardStr += board[i][j]->getColorAndType();
+		}
+	}
+	return boardStr;
+}
