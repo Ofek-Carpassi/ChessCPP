@@ -53,10 +53,13 @@ void main()
 	p.sendMessageToGraphics(msgToGraphics);   // send the board string
 
 	// get message from graphics
-	string msgFromGraphics = p.getMessageFromGraphics();
+	string msgFromGraphics;
 
-	while (msgFromGraphics != "quit")
+	do
 	{
+		// get message from graphics
+		msgFromGraphics = p.getMessageFromGraphics();
+
 		std::string Code = game.checkMove(msgFromGraphics);
 		
 		// YOUR CODE
@@ -65,9 +68,8 @@ void main()
 		// return result to graphics		
 		p.sendMessageToGraphics(msgToGraphics);
 
-		// get message from graphics
-		msgFromGraphics = p.getMessageFromGraphics();
 	}
+	while (msgFromGraphics != "quit");
 
 	p.close();
 	game.~Game();

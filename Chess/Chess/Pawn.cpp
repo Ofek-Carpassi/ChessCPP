@@ -10,7 +10,7 @@ Pawn::~Pawn()
 {
 }
 
-int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck) const 
+int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board, Game* game, bool isValidationCheck) const
 {
     // Get the position in terms of row and column in the array
     int currentRow = currentPos[1] - '1';
@@ -31,50 +31,51 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     // Determine direction based on color (white moves up, black moves down)
     int direction = isupper(colorAndType) ? 1 : -1;
 
-	// If the pawn moves forward one square
+    // If the pawn moves forward one square
     if (newCol == currentCol && newRow == currentRow + direction) {
-		// Check if path is clear
-        if (board->getPiece(newPos)->getColorAndType() != '0') {
+        // Check if path is clear
+        if (board->getPiece(newPos)->getColorAndType() != '#') {  // Empty square is '#'
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
-		// Check if the pawn is at the end of the board (promotion)
+        // Check if the pawn is at the end of the board (promotion)
         if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0)) {
             return VALID_MOVE_PROMOTION;
         }
         return SUCCESSFUL_MOVE;
     }
 
-	// If the pawn is at its initial position
+    // If the pawn is at its initial position
     bool isInitialPosition = (isupper(colorAndType) && currentRow == 1) || (!isupper(colorAndType) && currentRow == 6);
-	// If the pawn tries to move forward two squares
+    // If the pawn tries to move forward two squares
     if (isInitialPosition && newCol == currentCol && newRow == currentRow + (2 * direction)) {
-		// Check if path is clear (no pieces in the way)
+        // Check if path is clear (no pieces in the way)
         std::string midPos = "";
         midPos += currentPos[0];
-        midPos += (char)(currentRow + direction + '1');
-		// if there is no piece in the middle or the destination
-        if (board->getPiece(midPos)->getColorAndType() != '#' ||  board->getPiece(newPos)->getColorAndType() != '#') {
+        midPos += (char)(currentRow + direction + '1');  // Middle position
+
+        // Check if both the middle and destination squares are empty
+        if (board->getPiece(midPos)->getColorAndType() != '#' || board->getPiece(newPos)->getColorAndType() != '#') {
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
         return SUCCESSFUL_MOVE;
     }
 
-	// Diagonal capture (one row forward and one column to the left or right)
+    // Diagonal capture (one row forward and one column to the left or right)
     if (abs(newCol - currentCol) == 1 && newRow == currentRow + direction) {
-		// Make sure there is a piece to capture
+        // Make sure there is a piece to capture
         ChessPiece* destPiece = board->getPiece(newPos);
-        if (destPiece->getColorAndType() == '#') {
+        if (destPiece->getColorAndType() == '#') {  // No piece to capture
             return INVALID_MOVE_ILLEGAL_MOVE;
         }
-		// Make sure the piece is of the opposite color
+        // Make sure the piece is of the opposite color
         bool isSameColor = (isupper(destPiece->getColorAndType()) == isupper(this->colorAndType));
         if (isSameColor) {
             return INVALID_MOVE_PIECE_OF_PLAYER;
         }
-		// Check if the pawn is at the end of the board (promotion)
-		if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0)) {
-			return VALID_MOVE_PROMOTION;
-		}
+        // Check if the pawn is at the end of the board (promotion)
+        if ((isupper(colorAndType) && newRow == 7) || (!isupper(colorAndType) && newRow == 0)) {
+            return VALID_MOVE_PROMOTION;
+        }
         return VALID_MOVE_ATE_PIECE;
     }
 
@@ -82,20 +83,18 @@ int Pawn::isValidMove(std::string& currentPos, std::string& newPos, Board* board
     // Save a temporary board and apply the move to it - then check if the player is in check
     Board tempBoard(*board);
     tempBoard.movePiece(currentRow, currentCol, newRow, newCol);
-    char color = isupper(this->colorAndType) ? 'w' : 'b'; // Get the color of the piece (to know on which side to check for check)
+    char color = isupper(this->colorAndType) ? 'w' : 'b';  // Get the color of the piece (to know on which side to check for check)
 
-    // Make sure we need to check for check (no need if we use this function for isInCheck)
+    // If checking for a check situation, ensure we avoid an infinite loop
     if (!isValidationCheck) {
-        Board tempBoard(*board); // copy the board using the copy constructor
-        // if the player is in check after the move, the move is invalid (pass true so we won't cause an infinite loop)
-        if (game->isInCheck(color, &tempBoard, true))
-        {
+        if (game->isInCheck(color, &tempBoard, true)) {
             return INVALID_MOVE_CAUSE_CHECK;
         }
     }
 
     return INVALID_MOVE_ILLEGAL_MOVE;
 }
+
 
 ChessPiece* Pawn::promote(std::string& pos, char type) const
 {
