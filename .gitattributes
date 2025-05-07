@@ -1,0 +1,9 @@
+# Force GitHub to detect .cpp and .hpp as C++ files
+*.cpp linguist-language=C++
+*.h linguist-language=C++
+*.c linguist-language=C++
+*.hpp linguist-language=C++
+
+*.py linguist-language=Python
+
+*.cs linguist-language=CSharp
